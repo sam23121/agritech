@@ -15,10 +15,10 @@ result = client.list_objects(Bucket='usgs-lidar-public',
                              Prefix='',
                              Delimiter='/'
                              )
-obj = list()
+obj = ''
 for o in result.get('CommonPrefixes'):
     # print(o) 
-    obj.append(o.get('Prefix'))
+    obj = obj + '\n' + (o.get('Prefix')) 
 
 with open("data/REGIONS.txt", "w") as output:
     sys.path.append(os.path.abspath(os.path.join('../data')))

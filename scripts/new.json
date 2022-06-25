@@ -1,54 +1,79 @@
 {
     "pipeline": [
         {
-            "bounds": [
-                -10758075,
-                4793202,
-                -10034133,
-                5517144
-            ],
-            "filename": "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/IA_FullState/ept.json",
             "type": "readers.ept",
-            "tag": "readdata"
+            "tag": "read_data",
+            "bounds": "([-11070053.700558623, 512593.3380262476], [-10854098.279485222, 5759784.487027777])",
+            "filename": "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/IA_FullState/ept.json"
         },
         {
-            "inputs": [
-                "readdata"
-            ],
-            "polygon": "POLYGON((-10852490.831282353 42.08699318141732, -10852490.831282355 42.09042094379403, -10852490.822485086 42.090420948383326, -10852490.822485084 42.08699318600624, -10852490.831282353 42.08699318141732))",
             "type": "filters.crop",
-            "tag": "crop"
+            "inputs": [
+                "read_data"
+            ],
+            "tag": "crop",
+            "polygon": "POLYGON((-11070053.700558623 5759784.486005208, -10854098.288310554 512593.3380262476, -10854098.279485222 512593.3380823739, -11070053.687986547 5759784.487027777, -11070053.700558623 5759784.486005208))"
         },
         {
-            "limits": "Classification![2:2]",
             "type": "filters.range",
-            "tag": "nonoise"
+            "inputs": [
+                "crop"
+            ],
+            "tag": "no_noise",
+            "limits": "Classification![2:2]"
         },
         {
-            "out_srs": "EPSG:26915",
-            "in_srs": "EPSG:3857",
+            "type": "filters.assign",
+            "inputs": [
+                "no_noise"
+            ],
+            "tag": "wipe_classes",
+            "assignment": "Classification[:]=0"
+        },
+        {
+            "type": "filters.smrf",
+            "inputs": [
+                "wipe_classes"
+            ],
+            "tag": "groundify"
+        },
+        {
+            "type": "filters.range",
+            "inputs": [
+                "groundify"
+            ],
+            "tag": "classify",
+            "limits": "Classification[2:2]"
+        },
+        {
             "type": "filters.reprojection",
-            "tag": "reprojection"
+            "inputs": [
+                "classify"
+            ],
+            "tag": "reprojection",
+            "in_srs": "EPSG:3857",
+            "out_srs": "EPSG:26915"
         },
         {
-            "filename": "../data/usgs.laz",
+            "type": "writers.las",
             "inputs": [
                 "reprojection"
             ],
-            "tag": "writerslas",
-            "type": "writers.las"
+            "tag": "writers_las",
+            "filename": "../data/USGS_LPC_ID_AdamsCounty_2019_B19_11TNK05644945.laz"
         },
         {
-            "filename": "../data/usgs.tif",
-            "gdalopts": "tiled=yes,     compress=deflate",
+            "type": "writers.gdal",
             "inputs": [
-                "writerslas"
+                "writers_las"
             ],
+            "filename": "../data/USGS_1M_11_x56y495_ID_AdamsCounty_2019_B19.tif",
+            "gdalopts": "tiled=yes, compress=deflate",
             "nodata": -9999,
             "output_type": "idw",
             "resolution": 1,
-            "type": "writers.gdal",
-            "window_size": 6
+            "window_size": 6,
+            "radius": 1
         }
     ]
 }

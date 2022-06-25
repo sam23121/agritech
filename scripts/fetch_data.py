@@ -16,24 +16,25 @@ PUBLIC_DATA_PATH = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"
 
 tif_filename = '../data/USGS_1M_11_x56y495_ID_AdamsCounty_2019_B19.tif'
 laz_filename = '../data/USGS_LPC_ID_AdamsCounty_2019_B19_11TNK05644945.laz'
-filename_tif = '../data/usgs.tif'
-filename_laz = '../data/usgs.laz'
+# filename_tif = '../data/usgs.tif'
+# filename_laz = '../data/usgs.laz'
 
-MINX, MINY, MAXX, MAXY = [-93.756155, 41.918015, -93.747334, 41.921429]
+MINX, MINY, MAXX, MAXY = [-93.756155, 5100000.918015, -93.747334, 510000.921429]
 poly = Polygon(((MINX, MINY), (MINX, MAXY), (MAXX, MAXY), (MAXX, MINY), (MINX, MINY)))
 
 input_epsg = 3857
 output_epsg = 26915
 
-def get_polygon(polygon):
+def get_polygon(polygon=Polygon):
     
-    polygon_df = gpd.GeoDataFrame()
-    polygon_df['geometry'] = None
-    polygon_df.loc[0, 'geometry'] = poly
+    # polygon_df = gpd.GeoDataFrame()
+    # polygon_df['geometry'] = None
+    # polygon_df.loc[0, 'geometry'] = polygon
+    polygon_df = gpd.GeoDataFrame([poly], columns=['geometry'])
     polygon_df.set_crs(epsg=output_epsg, inplace=True)
-    polygon_df['geometry'] = polygon_df['geometry'].to_crs(epsg=3857)
+    polygon_df['geometry'] = polygon_df['geometry'].to_crs(epsg=input_epsg)
     minx, miny, maxx, maxy = polygon_df['geometry'][0].bounds
-    bound = f"({[minx, maxx]},{[miny,maxy]})"
+    bound = f"([{minx}, {miny}], [{maxx}, {maxy}])"
     xcord, ycord = polygon_df['geometry'][0].exterior.coords.xy
     polygon_input = 'POLYGON(('
     for x, y in zip(list(xcord), list(ycord)):
@@ -45,11 +46,11 @@ def get_polygon(polygon):
 
     return bound, polygon_input
 
-def get_pipeline(polygon, region):
+def get_pipeline(bounds, polygon, region):
     
     try:
         # pipe = json.read_json('../usgs2.json')
-        json_obj = 'usgs.json'
+        json_obj = 'usgs2.json'
         with open(json_obj, 'r') as json_file:
             pipe = json.load(json_file)
         PUBLIC_ACCESS_PATH = PUBLIC_DATA_PATH+region+"ept.json"
@@ -61,10 +62,10 @@ def get_pipeline(polygon, region):
         # points = df.loc[filename, 'points'] 
 
         pipe['pipeline'][0]['filename'] = PUBLIC_ACCESS_PATH
-        pipe['pipeline'][0]['bounds'] = [int(xmin), int(ymin),int(xmax), int(ymax)]
+        pipe['pipeline'][0]['bounds'] = bounds
         pipe['pipeline'][1]['polygon'] = polygon
-        pipe['pipeline'][4]['filename'] = filename_laz #laz_filename
-        pipe['pipeline'][5]['filename'] = filename_tif #tif_filename
+        pipe['pipeline'][7]['filename'] =  laz_filename
+        pipe['pipeline'][8]['filename'] =  tif_filename
         logging.info("pipeline initiated")
         with open("new.json", "w") as write_file:
             json.dump(pipe, write_file, indent=4)
@@ -78,7 +79,7 @@ def get_pipeline(polygon, region):
 def get_elevation(bounds, polygon_str, region):
     
     filename = region
-    pl = get_pipeline(polygon_str, region)
+    pl = get_pipeline(bounds, polygon_str, region)
     pl.execute()
     print(pl)
     for i in pl.arrays:

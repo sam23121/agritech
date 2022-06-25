@@ -1,0 +1,54 @@
+{
+    "pipeline": [
+        {
+            "bounds": [
+                -10758075,
+                4793202,
+                -10034133,
+                5517144
+            ],
+            "filename": "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/IA_FullState/ept.json",
+            "type": "readers.ept",
+            "tag": "readdata"
+        },
+        {
+            "inputs": [
+                "readdata"
+            ],
+            "polygon": "POLYGON((-10852490.831282353 42.08699318141732, -10852490.831282355 42.09042094379403, -10852490.822485086 42.090420948383326, -10852490.822485084 42.08699318600624, -10852490.831282353 42.08699318141732))",
+            "type": "filters.crop",
+            "tag": "crop"
+        },
+        {
+            "limits": "Classification![2:2]",
+            "type": "filters.range",
+            "tag": "nonoise"
+        },
+        {
+            "out_srs": "EPSG:26915",
+            "in_srs": "EPSG:3857",
+            "type": "filters.reprojection",
+            "tag": "reprojection"
+        },
+        {
+            "filename": "../data/usgs.laz",
+            "inputs": [
+                "reprojection"
+            ],
+            "tag": "writerslas",
+            "type": "writers.las"
+        },
+        {
+            "filename": "../data/usgs.tif",
+            "gdalopts": "tiled=yes,     compress=deflate",
+            "inputs": [
+                "writerslas"
+            ],
+            "nodata": -9999,
+            "output_type": "idw",
+            "resolution": 1,
+            "type": "writers.gdal",
+            "window_size": 6
+        }
+    ]
+}

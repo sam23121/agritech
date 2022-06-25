@@ -1,4 +1,4 @@
-Lumache
+Lidar_pipeline
 =======
 
 **Lidar_pipeline** is a Python library to transform and visualize lidar datasets

@@ -24,15 +24,19 @@ the package does the following task
 
 
 ## Setup:
+```
 git clone https://github.com/sam23121/agritech.git
 pip install -r requirements.py
 python -m testing
 the docs for the package is https://sam23121.github.io/docs/html/index.html
+```
 
 ## Code Examples
 Show examples of usage:
+```
 pl = Fetch()
 gdf = pl.fetch(polygon, "IA_FullState")
+```
 
 
 

@@ -6,32 +6,41 @@ Water is very important for crop growth and health.  We can better predict maize
 the task to produce an easy to use, reliable and well designed python module that domain experts and data scientists can use to fetch, visualise, and transform publicly available satellite and LIDAR data. In particular, your code should interface with USGS 3DEP and fetch data using their API.
 
 ## Table of contents
-
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Status](#status)
+* [Contact](#contact)
 
 ## General info
-the package is does the following task 
+the package does the following task 
 - Data Fetching and Loading
 - Visualization
 - Data Transformation
 
 
 ## Technologies
-* Tech 1 - version 1.0
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
+* sphinx for docs
 
-## Setup
-Describe how to install / setup your local environement / add link to demo version.
+
+## Setup:
+git clone https://github.com/sam23121/agritech.git
+pip install -r requirements.py
+python -m testing
+the docs for the package is https://sam23121.github.io/docs/html/index.html
 
 ## Code Examples
 Show examples of usage:
-`put-your-code-here`
+pl = Fetch()
+gdf = pl.fetch(polygon, "IA_FullState")
 
 
 
-To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+
+## To-do list:
+* improve the modularity
+* let users choose from a list of states
+* improve the docs
 
 ## Status
 Project is: _in progress_,

@@ -35,8 +35,8 @@ class Fetch:
         self.MAXX = -93.747334
         self.MINY = 41.921429
         self.PUBLIC_DATA_PATH = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"
-        self.tif_filename = '../data/USGS_1M_11_x56y495_ID_AdamsCounty_2019_B19.tif'
-        self.laz_filename = '../data/USGS_LPC_ID_AdamsCounty_2019_B19_11TNK05644945.laz'
+        self.tif_filename = '../data/data'
+        self.laz_filename = '../data/data'
         self.output_epsg = 4326 
 
 
@@ -74,8 +74,8 @@ class Fetch:
             pipe['pipeline'][0]['filename'] = self.PUBLIC_DATA_PATH + region + "/ept.json"
             pipe['pipeline'][0]['bounds'] = bounds
             pipe['pipeline'][1]['polygon'] = polygon
-            pipe['pipeline'][7]['filename'] =  self.laz_filename
-            pipe['pipeline'][8]['filename'] =  self.tif_filename
+            pipe['pipeline'][7]['filename'] =  self.laz_filename + ".laz"
+            pipe['pipeline'][8]['filename'] =  self.tif_filename + ".tif"
             logging.info("pipeline initiated")
             with open("new.json", "w") as write_file:
                 json.dump(pipe, write_file, indent=4)

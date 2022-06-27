@@ -52,7 +52,7 @@
             ],
             "tag": "reprojection",
             "in_srs": "EPSG:3857",
-            "out_srs": "EPSG:26915"
+            "out_srs": "EPSG:4326"
         },
         {
             "type": "writers.las",
@@ -60,14 +60,14 @@
                 "reprojection"
             ],
             "tag": "writers_las",
-            "filename": "../data/USGS_LPC_ID_AdamsCounty_2019_B19_11TNK05644945.laz"
+            "filename": "../data/data.laz"
         },
         {
             "type": "writers.gdal",
             "inputs": [
                 "writers_las"
             ],
-            "filename": "../data/USGS_1M_11_x56y495_ID_AdamsCounty_2019_B19.tif",
+            "filename": "../data/data.tif",
             "gdalopts": "tiled=yes, compress=deflate",
             "nodata": -9999,
             "output_type": "idw",

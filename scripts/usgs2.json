@@ -40,7 +40,7 @@
         "inputs": [ "classify" ],
         "tag": "reprojection",
         "in_srs": "EPSG:3857",
-        "out_srs": "EPSG:26915"
+        "out_srs": "EPSG:4326"
       },
       {
         "type": "writers.las",

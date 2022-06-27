@@ -45,7 +45,10 @@ gdf = pl.fetch(polygon, "IA_FullState")
 ## To-do list:
 * improve the modularity
 * let users choose from a list of states
+* adding a TWI column
+* vizuliaze it with more graphs
 * improve the docs
+
 
 ## Status
 Project is: _in progress_,

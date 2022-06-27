@@ -23,7 +23,7 @@ import numpy as np
 # poly = Polygon(((MINX, MINY), (MINX, MAXY), (MAXX, MAXY), (MAXX, MINY), (MINX, MINY)))
 
 # input_epsg = 3857
-# output_epsg = 4326 # the default is 26915 but to process it on my cpu I have changed it
+# output_epsg = 4326 
 
 class Fetch:
 
@@ -37,7 +37,7 @@ class Fetch:
         self.PUBLIC_DATA_PATH = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"
         self.tif_filename = '../data/USGS_1M_11_x56y495_ID_AdamsCounty_2019_B19.tif'
         self.laz_filename = '../data/USGS_LPC_ID_AdamsCounty_2019_B19_11TNK05644945.laz'
-        self.output_epsg = 4326 # the default is 26915 but to process it on my cpu I have changed it
+        self.output_epsg = 4326 
 
 
     def get_polygon(self, polygon):

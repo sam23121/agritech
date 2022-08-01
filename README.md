@@ -27,6 +27,7 @@ the package does the following task
 ```
 pip install -i https://test.pypi.org/simple/ lidar-pipeline==0.0.1
 ```
+```
 git clone https://github.com/sam23121/agritech.git
 pip install -r requirements.py
 python -m testing

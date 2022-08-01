@@ -26,6 +26,9 @@ import matplotlib.image as mpimg
 # output_epsg = 4326 
 
 class Fetch:
+    """
+    this class retrives  point cloud data from the ept resource from aws cloud storage
+    """
 
     def __init__(self):
         
@@ -41,10 +44,16 @@ class Fetch:
 
 
     def get_polygon(self, polygon):
-        
-        # polygon_df = gpd.GeoDataFrame()
-        # polygon_df['geometry'] = None
-        # polygon_df.loc[0, 'geometry'] = polygon
+        """
+        a method to get the polygon object
+
+        Args: 
+            polygon (polygon): a polygon object 
+
+        Returns:
+            bound: boundary of the polygon
+            polygon_input:
+        """
         polygon_df = gpd.GeoDataFrame([polygon], columns=['geometry'])
         polygon_df.set_crs(epsg=self.output_epsg, inplace=True)
         polygon_df['geometry'] = polygon_df['geometry'].to_crs(epsg=self.input_epsg)
@@ -62,7 +71,17 @@ class Fetch:
         return bound, polygon_input
 
     def get_pipeline(self, bounds, polygon, region):
-        
+        """
+        a method to get the pdal pipeline
+
+        Args: 
+            bounds (str): geometry object describing the boundary of interest
+            polygon (polygon): a polygon object 
+            region (str): the region where the data will be extracted from
+
+        Returns:
+            a pdal pipeline
+        """
         try:
             # pipe = json.read_json('../usgs2.json')
             json_obj = 'usgs2.json'
@@ -87,7 +106,18 @@ class Fetch:
 
 
     def get_elevation(self, bounds, polygon_str, region):
-        
+        """
+        a method to get the dataframe elevations points
+
+        Args: 
+            bounds (str): geometry object describing the boundary of interest
+            polygon_str (polygon): a polygon object describing the boundary of the specified location
+            region (str): the region where the data will be extracted from
+
+        Returns:
+            dataframe: a dataframe of the elevations specified area
+        """
+
         filename = region
         pl = self.get_pipeline(bounds, polygon_str, region)
         pl.execute()
@@ -107,14 +137,14 @@ class Fetch:
 
     def fetch(self, polygon, region):
         """
-        a method to fetch the dataframe of the elevations
+        a method to fetch the list of dataframes
 
         Args: 
             polygon (polygon): a polygon object
             region (str): the region where the data will be extracted from
 
         Returns:
-            dataframe: a dataframe of the elevations specified area
+            list: a list of the dataframes elevations specified area
         """
 
         bound, polygon_str = self.get_polygon(polygon)

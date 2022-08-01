@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: lidar-pipeline
+Version: 0.0.1
+Summary: a python package the easily use, load and visuliaze lidar data points
+Author: Samuel Anagow

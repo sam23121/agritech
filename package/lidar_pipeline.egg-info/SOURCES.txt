@@ -1,0 +1,8 @@
+README.md
+setup.py
+lidar_pipeline.egg-info/PKG-INFO
+lidar_pipeline.egg-info/SOURCES.txt
+lidar_pipeline.egg-info/dependency_links.txt
+lidar_pipeline.egg-info/top_level.txt
+package_scripts/__init__.py
+package_scripts/fetch_data.py
